@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>儿童MASLD风险评估工具</title>
+    <title>Children MASLD Risk Assessment Tool</title>
     <style>
         * {
             margin: 0;
@@ -201,7 +201,7 @@
             margin-bottom: 5px;
         }
 
-        /* 响应式设计 */
+        /* Responsive Design */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -251,216 +251,258 @@
             position: absolute;
             left: 0;
         }
+
+        .language-selector {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .language-selector select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: white;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>儿童MASLD风险评估工具</h1>
-        <p class="subtitle">基于机器学习模型的代谢相关脂肪性肝病风险评估</p>
+        <div class="language-selector">
+            <select onchange="changeLanguage(this.value)">
+                <option value="en">English</option>
+                <option value="zh">中文</option>
+            </select>
+        </div>
+
+        <h1>Children MASLD Risk Assessment Tool</h1>
+        <p class="subtitle">Machine Learning-based Prediction for Metabolic Dysfunction-associated Steatotic Liver Disease</p>
         
         <div class="info-section">
-            <h3>📊 指标说明</h3>
+            <h3>📊 Indicator Description</h3>
             <ul>
-                <li><strong>甘油三酯 (TG)</strong>: 血液中的脂肪含量，高水平可能增加MASLD风险</li>
-                <li><strong>血糖</strong>: 血液糖分水平，反映代谢健康状况</li>
-                <li><strong>高密度脂蛋白 (HDL)</strong>: "好"胆固醇，帮助清除其他形式的胆固醇</li>
-                <li><strong>体重指数 (BMI)</strong>: 基于身高和体重的身体脂肪测量指标</li>
+                <li><strong>Triglycerides (TG)</strong>: Type of fat found in blood, high levels may increase MASLD risk</li>
+                <li><strong>Glucose</strong>: Blood sugar level, indicator of metabolic health</li>
+                <li><strong>HDL Cholesterol</strong>: "Good" cholesterol that helps remove other forms of cholesterol</li>
+                <li><strong>Body Mass Index (BMI)</strong>: Measure of body fat based on height and weight</li>
             </ul>
         </div>
         
         <div class="form-group">
-            <label for="tg">甘油三酯 (TG):</label>
+            <label for="tg">Triglycerides (TG):</label>
             <div class="input-with-unit">
-                <input type="number" id="tg" placeholder="输入甘油三酯数值" min="0" max="1000" step="0.1">
+                <input type="number" id="tg" placeholder="Enter TG value" min="0" max="1000" step="0.1">
                 <span class="unit">mg/dl</span>
             </div>
         </div>
         
         <div class="form-group">
-            <label for="glucose">血糖:</label>
+            <label for="glucose">Glucose:</label>
             <div class="input-with-unit">
-                <input type="number" id="glucose" placeholder="输入血糖数值" min="0" max="500" step="0.1">
+                <input type="number" id="glucose" placeholder="Enter glucose value" min="0" max="500" step="0.1">
                 <span class="unit">mg/dl</span>
             </div>
         </div>
         
         <div class="form-group">
-            <label for="hdl">高密度脂蛋白 (HDL):</label>
+            <label for="hdl">HDL Cholesterol:</label>
             <div class="input-with-unit">
-                <input type="number" id="hdl" placeholder="输入HDL数值" min="0" max="200" step="0.1">
+                <input type="number" id="hdl" placeholder="Enter HDL value" min="0" max="200" step="0.1">
                 <span class="unit">mg/dl</span>
             </div>
         </div>
         
         <div class="form-group">
-            <label for="bmi">体重指数 (BMI):</label>
+            <label for="bmi">Body Mass Index (BMI):</label>
             <div class="input-with-unit">
-                <input type="number" id="bmi" step="0.1" placeholder="输入BMI数值" min="10" max="50">
+                <input type="number" id="bmi" step="0.1" placeholder="Enter BMI value" min="10" max="50">
                 <span class="unit">kg/m²</span>
             </div>
         </div>
         
-        <button onclick="calculateRisk()" id="calculateBtn">计算MASLD风险</button>
+        <button onclick="calculateRisk()" id="calculateBtn">Calculate MASLD Risk</button>
         
         <div id="result" class="result"></div>
 
         <div class="footer">
-            <p>© 2024 MASLD风险评估系统 | 基于梯度提升机器学习模型</p>
-            <p>此工具仅用于风险评估，不能替代专业医疗诊断</p>
+            <p>© 2024 MASLD Risk Assessment System | Based on Gradient Boosting Machine Learning Model</p>
+            <p>This tool is for risk assessment only and cannot replace professional medical diagnosis</p>
         </div>
     </div>
 
     <script>
-        // 风险评估算法（基于医学文献的简化版本）
+        // Risk assessment algorithm (simplified version based on medical literature)
         function calculateMASLDRisk(tg, glucose, hdl, bmi) {
-            // 标准化各项指标
+            // Standardize each indicator
             const tgScore = Math.max(0, (tg - 100) / 50) * 25;
             const glucoseScore = Math.max(0, (glucose - 100) / 20) * 20;
             const hdlScore = Math.max(0, (40 - hdl) / 10) * 15;
             const bmiScore = Math.max(0, (bmi - 22) / 3) * 40;
             
-            // 计算总分（0-100）
+            // Calculate total score (0-100)
             let totalScore = tgScore + glucoseScore + hdlScore + bmiScore;
             
-            // 确保分数在合理范围内
+            // Ensure score is within reasonable range
             totalScore = Math.max(5, Math.min(95, totalScore));
             
             return totalScore;
         }
 
-        // 显示结果函数
+        // Show result function
         function showResult(message, type) {
             const resultDiv = document.getElementById('result');
             resultDiv.innerHTML = message;
             resultDiv.className = 'result ' + type;
             resultDiv.style.display = 'block';
             
-            // 滚动到结果区域
+            // Scroll to result area
             resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
-        // 验证输入数据
+        // Validate input data
         function validateInputs(tg, glucose, hdl, bmi) {
             const errors = [];
             
-            if (!tg || tg <= 0) errors.push('请输入有效的甘油三酯值');
-            if (!glucose || glucose <= 0) errors.push('请输入有效的血糖值');
-            if (!hdl || hdl <= 0) errors.push('请输入有效的HDL值');
-            if (!bmi || bmi <= 0) errors.push('请输入有效的BMI值');
+            if (!tg || tg <= 0) errors.push('Please enter a valid Triglycerides value');
+            if (!glucose || glucose <= 0) errors.push('Please enter a valid Glucose value');
+            if (!hdl || hdl <= 0) errors.push('Please enter a valid HDL value');
+            if (!bmi || bmi <= 0) errors.push('Please enter a valid BMI value');
             
-            if (tg > 1000) errors.push('甘油三酯值过高，请检查输入');
-            if (glucose > 500) errors.push('血糖值过高，请检查输入');
-            if (hdl > 200) errors.push('HDL值过高，请检查输入');
-            if (bmi > 50) errors.push('BMI值过高，请检查输入');
-            if (bmi < 10) errors.push('BMI值过低，请检查输入');
+            if (tg > 1000) errors.push('Triglycerides value is too high, please check your input');
+            if (glucose > 500) errors.push('Glucose value is too high, please check your input');
+            if (hdl > 200) errors.push('HDL value is too high, please check your input');
+            if (bmi > 50) errors.push('BMI value is too high, please check your input');
+            if (bmi < 10) errors.push('BMI value is too low, please check your input');
             
             return errors;
         }
 
-        // 主要计算函数
+        // Main calculation function
         function calculateRisk() {
             try {
-                // 获取输入值
+                // Get input values
                 const tg = parseFloat(document.getElementById('tg').value);
                 const glucose = parseFloat(document.getElementById('glucose').value);
                 const hdl = parseFloat(document.getElementById('hdl').value);
                 const bmi = parseFloat(document.getElementById('bmi').value);
                 
-                // 禁用按钮防止重复点击
+                // Disable button to prevent multiple clicks
                 const calculateBtn = document.getElementById('calculateBtn');
                 calculateBtn.disabled = true;
-                calculateBtn.textContent = '计算中...';
+                calculateBtn.textContent = 'Calculating...';
                 
-                // 验证输入
+                // Validate inputs
                 const validationErrors = validateInputs(tg, glucose, hdl, bmi);
                 if (validationErrors.length > 0) {
                     showResult(`
-                        <h3>❌ 输入错误</h3>
+                        <h3>❌ Input Error</h3>
                         <ul>
                             ${validationErrors.map(error => `<li>${error}</li>`).join('')}
                         </ul>
                     `, 'error');
                     
-                    // 重新启用按钮
+                    // Re-enable button
                     calculateBtn.disabled = false;
-                    calculateBtn.textContent = '计算MASLD风险';
+                    calculateBtn.textContent = 'Calculate MASLD Risk';
                     return;
                 }
                 
-                // 显示加载中
-                showResult('正在分析数据并计算风险评估...', 'loading');
+                // Show loading
+                showResult('Analyzing data and calculating risk assessment...', 'loading');
                 
-                // 模拟计算过程（添加延迟让用户感觉在计算）
+                // Simulate calculation process (add delay to make it feel realistic)
                 setTimeout(() => {
-                    // 使用风险评估算法
+                    // Use risk assessment algorithm
                     const riskScore = calculateMASLDRisk(tg, glucose, hdl, bmi);
                     const roundedScore = Math.round(riskScore * 10) / 10;
                     
-                    // 确定风险等级和建议
+                    // Determine risk level and suggestions
                     let riskLevel, riskClass, suggestion;
                     
                     if (roundedScore < 20) {
-                        riskLevel = "低风险";
+                        riskLevel = "Low Risk";
                         riskClass = "risk-low";
-                        suggestion = "您的代谢指标相对健康。继续保持均衡饮食、规律运动和健康生活习惯，建议每年进行一次常规体检。";
+                        suggestion = "Your metabolic indicators are relatively healthy. Continue maintaining a balanced diet, regular exercise, and healthy lifestyle habits. Annual routine checkups are recommended.";
                     } else if (roundedScore < 50) {
-                        riskLevel = "中风险";
+                        riskLevel = "Medium Risk";
                         riskClass = "risk-medium";
-                        suggestion = "存在一定的代谢异常风险。建议改善饮食习惯，减少高糖高脂食物摄入，增加体育锻炼，3-6个月后复查相关指标。";
+                        suggestion = "There is some metabolic abnormality risk. We recommend improving dietary habits, reducing high-sugar and high-fat food intake, increasing physical exercise, and rechecking relevant indicators after 3-6 months.";
                     } else {
-                        riskLevel = "高风险";
+                        riskLevel = "High Risk";
                         riskClass = "risk-high";
-                        suggestion = "代谢指标异常明显，MASLD风险较高。强烈建议咨询专业医生进行肝功能检查、腹部超声等进一步评估，并在医生指导下进行干预治疗。";
+                        suggestion = "Significant metabolic indicator abnormalities and high MASLD risk. Strongly recommend consulting a healthcare professional for further evaluation including liver function tests and abdominal ultrasound, and follow medical guidance for intervention treatment.";
                     }
                     
-                    // 显示结果
+                    // Display results
                     showResult(`
-                        <h3>🔍 风险评估结果</h3>
-                        <p><strong>风险分数:</strong> <span class="${riskClass}">${roundedScore}%</span></p>
-                        <p><strong>风险等级:</strong> <span class="${riskClass}">${riskLevel}</span></p>
-                        <p><strong>健康建议:</strong> ${suggestion}</p>
+                        <h3>🔍 Risk Assessment Result</h3>
+                        <p><strong>Risk Score:</strong> <span class="${riskClass}">${roundedScore}%</span></p>
+                        <p><strong>Risk Level:</strong> <span class="${riskClass}">${riskLevel}</span></p>
+                        <p><strong>Health Recommendations:</strong> ${suggestion}</p>
                         
                         ${roundedScore >= 30 ? `
                         <div style="margin-top: 15px; padding: 10px; background: #fff3cd; border-radius: 5px; border-left: 4px solid #ffc107;">
-                            <strong>💡 改善建议:</strong>
+                            <strong>💡 Improvement Suggestions:</strong>
                             <ul style="margin-top: 8px; margin-bottom: 0;">
-                                <li>控制体重，目标BMI在18.5-24之间</li>
-                                <li>减少含糖饮料和加工食品摄入</li>
-                                <li>增加蔬菜水果和全谷物摄入</li>
-                                <li>每周至少150分钟中等强度运动</li>
-                                <li>限制饮酒，保证充足睡眠</li>
+                                <li>Control weight, target BMI between 18.5-24</li>
+                                <li>Reduce sugary drinks and processed food intake</li>
+                                <li>Increase vegetables, fruits, and whole grains</li>
+                                <li>At least 150 minutes of moderate exercise per week</li>
+                                <li>Limit alcohol consumption, ensure adequate sleep</li>
                             </ul>
                         </div>
                         ` : ''}
                         
                         <div style="margin-top: 20px; padding: 12px; background: #e7f3ff; border-radius: 5px; font-size: 14px; color: #555;">
-                            <strong>📝 注意事项:</strong>
-                            <p style="margin: 8px 0 0 0;">本评估基于输入指标计算，仅供参考。具体诊断请咨询专业医疗机构。</p>
+                            <strong>📝 Important Notes:</strong>
+                            <p style="margin: 8px 0 0 0;">This assessment is calculated based on input indicators and is for reference only. Specific diagnosis should be obtained from professional medical institutions.</p>
                         </div>
                     `, 'success');
                     
-                    // 重新启用按钮
+                    // Re-enable button
                     calculateBtn.disabled = false;
-                    calculateBtn.textContent = '计算MASLD风险';
+                    calculateBtn.textContent = 'Calculate MASLD Risk';
                     
-                }, 1500); // 1.5秒延迟模拟计算过程
+                }, 1500); // 1.5 second delay to simulate calculation
                 
             } catch (error) {
                 console.error('Error:', error);
                 showResult(`
-                    <h3>❌ 计算错误</h3>
+                    <h3>❌ Calculation Error</h3>
                     <p>${error.message}</p>
-                    <p style="margin-top: 10px; font-size: 14px;">请检查输入数据后重试</p>
+                    <p style="margin-top: 10px; font-size: 14px;">Please check your input data and try again</p>
                 `, 'error');
                 
-                // 重新启用按钮
+                // Re-enable button
                 const calculateBtn = document.getElementById('calculateBtn');
                 calculateBtn.disabled = false;
-                calculateBtn.textContent = '计算MASLD风险';
+                calculateBtn.textContent = 'Calculate MASLD Risk';
             }
         }
 
-        // 输入框回车键支持
+        // Language switching function
+        function changeLanguage(lang) {
+            if (lang === 'zh') {
+                window.location.href = '?lang=zh';
+            } else {
+                window.location.href = '?lang=en';
+            }
+        }
+
+        // Set current language based on URL parameter
+        function setLanguageFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const lang = urlParams.get('lang');
+            const select = document.querySelector('.language-selector select');
+            
+            if (lang === 'zh' && select) {
+                select.value = 'zh';
+            } else {
+                select.value = 'en';
+            }
+        }
+
+        // Input box enter key support
         document.addEventListener('DOMContentLoaded', function() {
             const inputs = document.querySelectorAll('input');
             inputs.forEach(input => {
@@ -471,13 +513,16 @@
                 });
             });
             
-            // 设置示例数据（可选）
-            document.getElementById('tg').placeholder = '例如: 150';
-            document.getElementById('glucose').placeholder = '例如: 95';
-            document.getElementById('hdl').placeholder = '例如: 45';
-            document.getElementById('bmi').placeholder = '例如: 23.5';
+            // Set example data placeholders
+            document.getElementById('tg').placeholder = 'e.g.: 150';
+            document.getElementById('glucose').placeholder = 'e.g.: 95';
+            document.getElementById('hdl').placeholder = 'e.g.: 45';
+            document.getElementById('bmi').placeholder = 'e.g.: 23.5';
             
-            console.log('MASLD风险评估工具已加载完成');
+            // Set language from URL
+            setLanguageFromURL();
+            
+            console.log('MASLD Risk Assessment Tool loaded successfully');
         });
     </script>
 </body>
