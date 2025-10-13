@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Children MASLD Risk Assessment Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .input-hint {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        
+        .calculate-btn {
+            width: 100%;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .calculate-btn:hover {
+            background: #2980b9;
+        }
+        
+        .result {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .risk-very-low {
+            background: #d4edda;
+            border: 2px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .risk-low {
+            background: #d1ecf1;
+            border: 2px solid #bee5eb;
+            color: #0c5460;
+        }
+        
+        .risk-medium {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            color: #856404;
+        }
+        
+        .risk-medium-high {
+            background: #f8d7da;
+            border: 2px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .risk-high {
+            background: #f5c6cb;
+            border: 2px solid #e6afb5;
+            color: #721c24;
+        }
+        
+        .risk-percentage {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        
+        .recommendation {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 14px;
+            border-top: 1px solid #ecf0f1;
+        }
+        
+        .feature-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        
+        .calculated-indexes {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .calculated-indexes h4 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .calculated-indexes p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Children MASLD Risk Assessment Tool</h1>
+            <p>Machine Learning-based Prediction for Metabolic Dysfunction-associated Steatotic Liver Disease</p>
+        </div>
+        
+        <div class="content">
+            <form id="riskForm">
+                <div class="input-group">
+                    <label for="tg">Triglycerides (TG, mg/dl)</label>
+                    <input type="number" id="tg" name="tg" step="0.01" placeholder="Enter TG value in mg/dl" required>
+                    <div class="input-hint">Fasting triglycerides level in mg/dl</div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="glucose">Glucose (mg/dl)</label>
+                    <input type="number" id="glucose" name="glucose" step="0.01" placeholder="Enter glucose value in mg/dl" required>
+                    <div class="input-hint">Fasting blood glucose level in mg/dl</div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="hdl">HDL Cholesterol (mg/dl)</label>
+                    <input type="number" id="hdl" name="hdl" step="0.01" placeholder="Enter HDL value in mg/dl" required>
+                    <div class="input-hint">High-density lipoprotein cholesterol level in mg/dl</div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="bmi">Body Mass Index (BMI, kg/m²)</label>
+                    <input type="number" id="bmi" name="bmi" step="0.01" placeholder="Enter BMI value" required>
+                    <div class="input-hint">Body Mass Index in kg/m²</div>
+                </div>
+                
+                <button type="button" class="calculate-btn" onclick="calculateRisk()">
+                    Calculate MASLD Risk
+                </button>
+            </form>
+            
+            <div class="loading" id="loading">
+                <p>Calculating risk, please wait...</p>
+            </div>
+            
+            <div class="result" id="result">
+                <h3>MASLD Risk Assessment Result</h3>
+                <div class="risk-percentage" id="riskPercentage">0%</div>
+                <div class="risk-level" id="riskLevel"></div>
+                <div class="recommendation" id="recommendation"></div>
+            </div>
+            
+            <div class="feature-info">
+                <h4>Indicator Description:</h4>
+                <p><strong>Triglycerides (TG)</strong>: Type of fat found in blood, high levels may increase MASLD risk</p>
+                <p><strong>Glucose</strong>: Blood sugar level, indicator of metabolic health</p>
+                <p><strong>HDL Cholesterol</strong>: "Good" cholesterol that helps remove other forms of cholesterol</p>
+                <p><strong>BMI</strong>: Body Mass Index, measure of body fat based on height and weight</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2024 MASLD Risk Assessment System | Based on Gradient Boosting Machine Learning Model</p>
+            <p>This tool is for risk assessment only and cannot replace professional medical diagnosis</p>
+        </div>
+    </div>
+
+    <script>
+        function calculateRisk() {
+            const form = document.getElementById('riskForm');
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result');
+            
+            // 验证输入
+            const inputs = form.querySelectorAll('input[required]');
+            let valid = true;
+            inputs.forEach(input => {
+                if (!input.value) {
+                    valid = false;
+                    input.style.borderColor = '#e74c3c';
+                } else {
+                    input.style.borderColor = '#e0e0e0';
+                }
+            });
+            
+            if (!valid) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // 显示加载中
+            loading.style.display = 'block';
+            result.style.display = 'none';
+            
+            // 收集数据
+            const formData = new FormData(form);
+            const data = {
+                tg: formData.get('tg'),
+                glucose: formData.get('glucose'),
+                hdl: formData.get('hdl'),
+                bmi: formData.get('bmi')
+            };
+            
+            // 发送请求
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(resultData => {
+                loading.style.display = 'none';
+                
+                if (resultData.success) {
+                    displayResult(resultData);
+                } else {
+                    alert('Calculation failed: ' + resultData.error);
+                }
+            })
+            .catch(error => {
+                loading.style.display = 'none';
+                alert('Network error: ' + error);
+            });
+        }
+        
+        function displayResult(data) {
+            const result = document.getElementById('result');
+            const riskPercentage = document.getElementById('riskPercentage');
+            const riskLevel = document.getElementById('riskLevel');
+            const recommendation = document.getElementById('recommendation');
+            
+            riskPercentage.textContent = data.risk_percentage + '%';
+            riskLevel.textContent = 'Risk Level: ' + data.risk_level;
+            recommendation.textContent = 'Recommendation: ' + data.recommendation;
+            
+            // 清除之前可能存在的计算指标显示
+            const existingIndexes = document.querySelector('.calculated-indexes');
+            if (existingIndexes) {
+                existingIndexes.remove();
+            }
+            
+            // 显示计算出的指标
+            if (data.calculated_indexes) {
+                const indexesHtml = `
+                    <div class="calculated-indexes">
+                        <h4>Calculated Medical Indexes:</h4>
+                        <p><strong>SPISE:</strong> ${data.calculated_indexes.SPISE}</p>
+                        <p><strong>METS-IR:</strong> ${data.calculated_indexes.METS_IR}</p>
+                        <p><strong>TyG:</strong> ${data.calculated_indexes.TyG}</p>
+                        <p><strong>TG/HDL:</strong> ${data.calculated_indexes.TG_HDL}</p>
+                    </div>
+                `;
+                recommendation.insertAdjacentHTML('afterend', indexesHtml);
+            }
+            
+            // 根据风险等级设置样式
+            result.className = 'result';
+            result.classList.add(data.color_class);
+            
+            result.style.display = 'block';
+        }
+        
+        // 回车键提交
+        document.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                calculateRisk();
+            }
+        });
+    </script>
+</body>
+</html>

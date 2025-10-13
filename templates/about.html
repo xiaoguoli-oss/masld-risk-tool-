@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - MASLD Risk Assessment Tool</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .content { padding: 40px; }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            border-top: 1px solid #ecf0f1;
+        }
+        .back-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        h3 { margin: 20px 0 10px 0; color: #2c3e50; }
+        ul { margin-left: 20px; margin-bottom: 20px; }
+        li { margin-bottom: 8px; }
+        p { margin-bottom: 15px; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>About MASLD Risk Assessment Tool</h1>
+        </div>
+        
+        <div class="content">
+            <h3>Model Information</h3>
+            <p>This tool is developed based on Gradient Boosting machine learning algorithm, trained using clinical data from 1,345 children.</p>
+            
+            <h3>Input Parameters</h3>
+            <p>The tool requires four basic medical parameters:</p>
+            <ul>
+                <li><strong>Triglycerides (TG)</strong>: Measured in mg/dl</li>
+                <li><strong>Glucose</strong>: Fasting blood glucose in mg/dl</li>
+                <li><strong>HDL Cholesterol</strong>: High-density lipoprotein in mg/dl</li>
+                <li><strong>BMI</strong>: Body Mass Index in kg/m²</li>
+            </ul>
+            
+            <h3>Calculated Medical Indexes</h3>
+            <p>The system automatically calculates these complex medical indexes:</p>
+            <ul>
+                <li><strong>SPISE</strong>: Single Point Insulin Sensitivity Estimator</li>
+                <li><strong>METS-IR</strong>: Metabolic Score for Insulin Resistance</li>
+                <li><strong>TyG</strong>: Triglyceride-glucose Index</li>
+                <li><strong>TG/HDL</strong>: Triglyceride to High-density Lipoprotein Ratio</li>
+            </ul>
+            
+            <h3>Model Performance</h3>
+            <p>Performance on independent test set:</p>
+            <ul>
+                <li>AUC: 0.869</li>
+                <li>Total Samples: 1,345</li>
+                <li>MASLD Positive: 107</li>
+                <li>MASLD Negative: 1,238</li>
+            </ul>
+            
+            <h3>Disclaimer</h3>
+            <p>This tool is for preliminary risk assessment only and cannot replace professional medical diagnosis. If you have concerns, please consult a healthcare professional promptly.</p>
+            
+            <a href="/" class="back-btn">Back to Home</a>
+        </div>
+        
+        <div class="footer">
+            <p>© 2024 MASLD Risk Assessment System - For Research Purposes</p>
+        </div>
+    </div>
+</body>
+</html>

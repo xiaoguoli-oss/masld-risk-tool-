@@ -1,0 +1,42 @@
+{
+  "feature_columns": [
+    "SPISE",
+    "METS-IR",
+    "TyG",
+    "TG/HDL",
+    "TG/HDL_squared",
+    "SPISE_squared",
+    "METS_TyG_interaction",
+    "TyG_squared",
+    "weighted_combination",
+    "METS-IR_squared",
+    "SPISE_METS_ratio",
+    "SPISE_TyG_interaction",
+    "SPISE_METS_interaction"
+  ],
+  "base_features": [
+    "SPISE",
+    "METS-IR",
+    "TyG",
+    "TG/HDL"
+  ],
+  "derived_features": [
+    "TG/HDL_squared",
+    "SPISE_squared",
+    "METS_TyG_interaction",
+    "TyG_squared",
+    "weighted_combination",
+    "METS-IR_squared",
+    "SPISE_METS_ratio",
+    "SPISE_TyG_interaction",
+    "SPISE_METS_interaction"
+  ],
+  "model_type": "GradientBoosting",
+  "model_performance": {
+    "test_auc": 0.8694976478494624,
+    "total_samples": 1345,
+    "masld_positive": 107,
+    "masld_negative": 1238
+  },
+  "creation_date": "2025-10-09 21:54:02"
+}
