@@ -4,7 +4,132 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>儿童MASLD风险评估工具</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        p {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+        }
+
+        input:focus {
+            border-color: #3498db;
+            background-color: white;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        button {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 16px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .success {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+
+        .error {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e8ed;
+            text-align: center;
+        }
+
+        .footer p {
+            font-size: 12px;
+            color: #95a5a6;
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -41,6 +166,73 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        function calculateRisk() {
+            // 获取输入值
+            const tg = parseFloat(document.getElementById('tg').value) || 0;
+            const glucose = parseFloat(document.getElementById('glucose').value) || 0;
+            const hdl = parseFloat(document.getElementById('hdl').value) || 0;
+            const bmi = parseFloat(document.getElementById('bmi').value) || 0;
+            
+            // 验证输入
+            if (!tg || !glucose || !hdl || !bmi) {
+                showResult('请填写所有字段', 'error');
+                return;
+            }
+            
+            // 显示加载中
+            showResult('正在计算风险评估...', 'success');
+            
+            // 模拟计算（基于简化逻辑）
+            setTimeout(() => {
+                // 简化的风险评估逻辑
+                const baseScore = (tg * 0.002) + (glucose * 0.0015) - (hdl * 0.003) + (bmi * 0.05);
+                let riskScore = Math.min(Math.max(baseScore * 100, 5), 95);
+                riskScore = Math.round(riskScore * 10) / 10;
+                
+                let riskLevel, suggestion;
+                
+                if (riskScore < 20) {
+                    riskLevel = "低风险";
+                    suggestion = "保持良好的生活习惯，均衡饮食和适量运动";
+                } else if (riskScore < 50) {
+                    riskLevel = "中风险";
+                    suggestion = "建议定期检查，注意饮食控制和增加体育锻炼";
+                } else {
+                    riskLevel = "高风险";
+                    suggestion = "强烈建议咨询专业医生进行详细检查和评估";
+                }
+                
+                showResult(`
+                    <h3>🔍 风险评估结果</h3>
+                    <p><strong>风险分数:</strong> ${riskScore}%</p>
+                    <p><strong>风险等级:</strong> ${riskLevel}</p>
+                    <p><strong>健康建议:</strong> ${suggestion}</p>
+                    <p style="margin-top: 15px; font-size: 14px; color: #666;">
+                        <em>注: 此为演示版本，实际评估请使用完整机器学习模型</em>
+                    </p>
+                `, 'success');
+            }, 1000);
+        }
+        
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = message;
+            resultDiv.className = 'result ' + type;
+            resultDiv.style.display = 'block';
+        }
+        
+        // 输入框回车键支持
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        calculateRisk();
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
