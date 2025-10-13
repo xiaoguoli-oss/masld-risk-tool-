@@ -1,19 +1,24 @@
 from flask import Flask, render_template, request, jsonify
 import pickle
+import json
 import numpy as np
-import os
 
 app = Flask(__name__)
 
-# 尝试加载模型
+# 加载模型
+print("正在加载MASLD预测模型...")
 try:
     with open('masld_gb_model.pkl', 'rb') as f:
         model = pickle.load(f)
+    
+    with open('model_features.json', 'r') as f:
+        feature_config = json.load(f)
+    
     model_loaded = True
-    print("模型加载成功")
+    print("✅ 模型加载成功!")
 except Exception as e:
     model_loaded = False
-    print(f"模型加载失败: {e}")
+    print(f"❌ 模型加载失败: {e}")
 
 @app.route('/')
 def home():
@@ -31,7 +36,7 @@ def predict():
         hdl = float(data.get('hdl', 0))
         bmi = float(data.get('bmi', 0))
         
-        # 进行预测
+        # 准备特征并预测
         features = np.array([[tg, glucose, hdl, bmi]])
         prediction = model.predict_proba(features)[0][1]
         risk_percentage = round(prediction * 100, 2)
@@ -57,5 +62,6 @@ def predict():
     except Exception as e:
         return jsonify({'status': 'error', 'message': f'预测出错: {str(e)}'})
 
+# Vercel需要这个
 if __name__ == '__main__':
     app.run(debug=True)
